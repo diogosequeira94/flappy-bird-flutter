@@ -11,11 +11,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double birdY = 0;
-
+  static double birdY = 0;
+  double initialPos = birdY;
+  double height = 0;
+  double time = 0;
+  double gravity = -4.9; // How Strong the gravity is
+  double velocity = 30; // How Strong the Jump is
   void jump() {
     Timer.periodic(const Duration(milliseconds: 50), (timer) {
       setState(() {
+        height = gravity * time * time + velocity * time;
         // Bird moves Up, so we need to decrease value of Y value
         birdY -= 0.05;
       });
