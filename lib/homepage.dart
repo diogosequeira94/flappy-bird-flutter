@@ -11,19 +11,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  /// Bird position on Y axis
   static double birdY = 0;
+
+  /// How strong the gravity is
+  double gravity = -4.9;
+
+  /// How strong the jump is
+  double velocity = 30;
   double initialPos = birdY;
   double height = 0;
   double time = 0;
-  double gravity = -4.9; // How Strong the gravity is
-  double velocity = 30; // How Strong the Jump is
   void jump() {
     Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      /// A real physical jump is the same as an upside down parabola
+      /// this is a simple quadratic equation
+      height = gravity * time * time + velocity * time;
       setState(() {
-        height = gravity * time * time + velocity * time;
-        // Bird moves Up, so we need to decrease value of Y value
-        birdY -= 0.05;
+        birdY = initialPos - height;
       });
+      // Keep the time going!
+      time += 0.1;
     });
   }
 
