@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flappy_bird_flutter/game_objects/bird.dart';
+import 'package:flappy_bird_flutter/game_objects/coverscreen.dart';
 import 'package:flutter/material.dart';
+
+import 'game_objects/barrier.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -54,9 +57,26 @@ class _HomePageState extends State<HomePage> {
         _showDialog();
       }
 
+      // keep the map moving (move barriers)
+      moveMap();
+
       // Keep the time going!
       time += 0.1;
     });
+  }
+
+  void moveMap() {
+    for (int i = 0; i < barrierX.length; i++) {
+      // keep barriers moving
+      setState(() {
+        barrierX[i] -= 0.005;
+      });
+
+      // if barrier exits the left part of the screen, keep it looping
+      if (barrierX[i] < -1.5) {
+        barrierX[i] += 3;
+      }
+    }
   }
 
   void jump() {
@@ -147,14 +167,35 @@ class _HomePageState extends State<HomePage> {
                       birdWidth: birdWidth,
                       birdHeight: birdHeight,
                     ),
-                    if (!gameHasStarted)
-                      Container(
-                        alignment: Alignment(0, -0.5),
-                        child: Text(
-                          'T A P  T O  P L A Y',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      ),
+                    if (!gameHasStarted) CoverScreen(),
+                    // Top 0
+                    Barrier(
+                      barrierX: barrierX[0],
+                      barrierWidth: barrierWidth,
+                      barrierHeight: barrierHeight[0][0],
+                      isBottomBarrier: false,
+                    ),
+                    // Bottom 0
+                    Barrier(
+                      barrierX: barrierX[0],
+                      barrierWidth: barrierWidth,
+                      barrierHeight: barrierHeight[0][1],
+                      isBottomBarrier: true,
+                    ),
+                    // Top 1
+                    Barrier(
+                      barrierX: barrierX[1],
+                      barrierWidth: barrierWidth,
+                      barrierHeight: barrierHeight[1][0],
+                      isBottomBarrier: false,
+                    ),
+                    // Bottom 1
+                    Barrier(
+                      barrierX: barrierX[1],
+                      barrierWidth: barrierWidth,
+                      barrierHeight: barrierHeight[1][1],
+                      isBottomBarrier: true,
+                    ),
                   ],
                 ),
               ),
