@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Barrier extends StatelessWidget {
-  final barrierHeight; // proportion of the screen height
   final barrierWidth; // out of 2, where 2 is the width of the screen
+  final barrierHeight; // proportion of the screenheight
   final barrierX;
   final bool isBottomBarrier;
 
-  const Barrier(
+  Barrier(
       {this.barrierHeight,
       this.barrierWidth,
       required this.isBottomBarrier,
-      this.barrierX,
-      Key? key})
-      : super(key: key);
+      this.barrierX});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class Barrier extends StatelessWidget {
       child: Container(
         color: Colors.green,
         width: MediaQuery.of(context).size.width * barrierWidth / 2,
-        height: MediaQuery.of(context).size.height * 3 / 4 * barrierHeight,
+        height: MediaQuery.of(context).size.height * 3 / 4 * barrierHeight / 2,
       ),
     );
   }
