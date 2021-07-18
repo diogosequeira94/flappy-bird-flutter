@@ -13,6 +13,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   /// Bird position on Y axis
   static double birdY = 0;
+  double birdWidth = 0.1; // out of 2, 2 being entire width of the screen
+  double birdHeight = 0.1; // out of 2, 2 being entire height of the screen
 
   /// How strong the gravity is
   double gravity = -4.9;
@@ -65,7 +67,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool isBirdDead() {
-    return birdY < -1 || birdY > 1;
+    if (birdY < -1 || birdY > 1) {
+      return true;
+    }
+
+    // hits barriers
+    // checks if bird is within x coordinates and y coordinates of barriers
+
+    for (int i = 0; i < barrierX.length; i++) {
+      if (barrierX[i] <= birdWidth &&
+          barrierX[i] + barrierWidth >= -birdWidth &&
+          (birdY <= -1 + barrierHeight[i][0] ||
+              birdY + birdHeight >= 1 - barrierHeight[i][1])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void resetGame() {
@@ -125,7 +142,11 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.blue,
                 child: Stack(
                   children: [
-                    FlappyBird(birdY: birdY),
+                    FlappyBird(
+                      birdY: birdY,
+                      birdWidth: birdWidth,
+                      birdHeight: birdHeight,
+                    ),
                     if (!gameHasStarted)
                       Container(
                         alignment: Alignment(0, -0.5),
