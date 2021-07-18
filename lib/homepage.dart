@@ -17,13 +17,14 @@ class _HomePageState extends State<HomePage> {
   static double birdY = 0;
   double initialPos = birdY;
   double height = 0;
-  double time = 0;
-  double gravity = -4.9; // how strong the gravity is
-  double velocity = 3.5; // how strong the jump is
-  double birdWidth = 0.1; // out of 2, 2 being the entire width of the screen
-  double birdHeight = 0.1; // out of 2, 2 being the entire height of the screen
+  final double birdWidth =
+      0.1; // out of 2, 2 being the entire width of the screen
+  final double birdHeight = 0.1; // out of 2, 2 being the entire height of the screen
 
   // game settings
+  double time = 0;
+  final double gravity = -4.9; // how strong the gravity is
+  final double velocity = 3.5; // how strong the jump is
   bool gameHasStarted = false;
 
   // barrier variables
@@ -113,7 +114,21 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-              )
+              ),
+              GestureDetector(
+                onTap: resetGame,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    padding: EdgeInsets.all(7),
+                    color: Colors.white,
+                    child: Text(
+                      'EXIT',
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                  ),
+                ),
+              ),
             ],
           );
         });
