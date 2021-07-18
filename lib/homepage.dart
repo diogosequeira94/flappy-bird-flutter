@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flappy_bird_flutter/bird.dart';
+import 'package:flappy_bird_flutter/game_objects/bird.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,6 +25,17 @@ class _HomePageState extends State<HomePage> {
 
   // Game Settings
   bool gameHasStarted = false;
+
+  // Barrier Variables
+  static List<double> barrierX = [2, 2 + 1.5];
+  static double barrierWidth = 0.5;
+  List<List<double>> barrierHeight = [
+    /// out of 2, where 2 is the entire height of the screen
+    /// [topHeight, bottomHeight]
+    [0.6, 0.4],
+    [0.4, 0.6],
+  ];
+
   void startGame() {
     gameHasStarted = true;
     Timer.periodic(const Duration(milliseconds: 50), (timer) {
@@ -38,7 +49,6 @@ class _HomePageState extends State<HomePage> {
       // Check if bird is dead
       if (isBirdDead()) {
         timer.cancel();
-        gameHasStarted = false;
         _showDialog();
       }
 
