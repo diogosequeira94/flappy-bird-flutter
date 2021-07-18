@@ -18,11 +18,15 @@ class _HomePageState extends State<HomePage> {
   double gravity = -4.9;
 
   /// How strong the jump is
-  double velocity = 30;
+  double velocity = 3.5;
   double initialPos = birdY;
   double height = 0;
   double time = 0;
-  void jump() {
+
+  // Game Settings
+  bool gameHasStarted = false;
+  void startGame() {
+    gameHasStarted = true;
     Timer.periodic(const Duration(milliseconds: 50), (timer) {
       /// A real physical jump is the same as an upside down parabola
       /// this is a simple quadratic equation
@@ -30,14 +34,78 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         birdY = initialPos - height;
       });
+
+      // Check if bird is dead
+      if (isBirdDead()) {
+        timer.cancel();
+        gameHasStarted = false;
+        _showDialog();
+      }
+
       // Keep the time going!
       time += 0.1;
     });
   }
 
+  void jump() {
+    setState(() {
+      time = 0;
+      initialPos = birdY;
+    });
+  }
+
+  bool isBirdDead() {
+    return birdY < -1 || birdY > 1;
+  }
+
+  void resetGame() {
+    Navigator.pop(context); // Dismisses the alert dialog
+    setState(() {
+      birdY = 0;
+      gameHasStarted = false;
+      time = 0;
+      initialPos = birdY;
+    });
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.brown,
+          title: Center(
+            child: Text(
+              'G A M E  O V E R',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: resetGame,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5.0),
+                child: Container(
+                  padding: EdgeInsets.all(7.0),
+                  color: Colors.white,
+                  child: Text(
+                    'PLAY AGAIN',
+                    style: TextStyle(color: Colors.brown),
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: gameHasStarted ? jump : startGame,
       child: Scaffold(
         body: Column(
           children: [
@@ -47,7 +115,15 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.blue,
                 child: Stack(
                   children: [
-                    FlappyBird(),
+                    FlappyBird(birdY: birdY),
+                    if (!gameHasStarted)
+                      Container(
+                        alignment: Alignment(0, -0.5),
+                        child: Text(
+                          'T A P  T O  P L A Y',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
                   ],
                 ),
               ),

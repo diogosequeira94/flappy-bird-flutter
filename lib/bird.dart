@@ -9,7 +9,7 @@ class FlappyBird extends StatelessWidget {
     return Container(
       alignment: Alignment(0, birdY),
       child: Image.asset(
-        'assets/flappybird.png',
+        'assets/bird.png',
         width: 50,
         height: 50,
       ),
